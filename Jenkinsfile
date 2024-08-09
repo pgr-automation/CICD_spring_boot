@@ -28,6 +28,17 @@ pipeline{
                 '''
             }
         }
+        stage('SonarQube Code Analysis'){
+            steps{
+                withCredentials([string(credentialsId: 'SonarQube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    sh '''
+                        cd spring-bootapp/
+                        mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                    '''
+                }
+
+            }
+        }
       
         
     }
