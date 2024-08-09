@@ -12,14 +12,14 @@ RUN mvn dependency:go-offline
 COPY ./src ./src
 RUN mvn clean package
 
-# Use OpenJDK to run the application
-FROM openjdk:17-jdk-slim
+# Use OpenJDK to run the application - run time image
+#FROM openjdk:17-jdk-slim
 
 # Set the working directory
-WORKDIR /app
+#WORKDIR /app
 
 # Copy the built JAR file from the build stage
-COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
+#COPY --from=build /app/target/demo-0.0.1-SNAPSHOT.jar app.jar
 
 
 # Expose the port the app runs on
