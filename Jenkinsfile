@@ -1,11 +1,12 @@
 pipeline{
     environment {
-        Docker_image = "maven:3.8.7-eclipse-temurin-17"
-        ONAR_URL = "http://192.168.1.130:9000" 
+        Docker_image = "springbootapp"
+        SONAR_URL = "http://192.168.1.130:9000" 
         
     }
     agent {
-        docker { image 'maven:3.8.7-eclipse-temurin-17'
+        docker { image '9902736822/maven_project_agent:latest'
+        args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
     }
     }
     
@@ -32,13 +33,22 @@ pipeline{
             steps{
                 withCredentials([string(credentialsId: 'SonarQube', variable: 'SONAR_AUTH_TOKEN')]) {
                     sh '''
-                        mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
+                        cd spring-bootapp/
+                        mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
                         '''
                 }
 
             }
         }
-      
+        stage('Docker Image Build'){
+             
+            steps{
+                sh '''
+                    cd spring-bootapp/  
+                    docker build -t ${Docker_image} .
+                '''
+            }
+        }
         
     }
 }
