@@ -5,7 +5,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the built JAR file from the build stage
-COPY ./spring-bootapp/target/demo-0.0.1-SNAPSHOT.jar app.jar
+COPY ./target/demo-0.0.1-SNAPSHOT.jar app.jar
 
 
 # Expose the port the app runs on
