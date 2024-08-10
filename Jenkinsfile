@@ -1,6 +1,6 @@
 pipeline{
     environment {
-        Docker_image = "springbootapp:${Build_Version}"
+        Docker_image = "9902736822/springbootapp:${Build_Version}"
         SONAR_URL = "http://192.168.1.130:9000" 
         DOCKER_REGISTRY = "https://hub.docker.com/"
         DOCKER_CREDENTIALS_ID = "1001"
@@ -71,16 +71,11 @@ pipeline{
 
         stage('Tag Image and Push to registry'){
             steps{
-                withDockerRegistry(credentialsId: '1001', url: 'https://registry-1.docker.io/v2/') {
-                    script{
-                        sh '''
-                            echo "Docker tag Image"
-                            docker tag ${Docker_image} 9902736822/${Docker_image}
-                            docker push 9902736822/${Docker_image}
-                        '''
-
-                    }
-                }
+                sh '''
+                    echo ${DOCKER_CREDENTIALS_ID_PSW} | docker login -u ${DOCKER_CREDENTIALS_ID_USR} --password-stdin
+                    docker tag ${Docker_image} ${Docker_image}
+                    docker push ${Docker_image}
+                '''
 
             }
         }
