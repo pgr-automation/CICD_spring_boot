@@ -51,16 +51,16 @@ pipeline{
         }
         stage('Image scan using trivy'){
             
-            when {
-                expression {
-                    return sh(script: 'trivy image --exit-code 1 ${Docker_image}', returnStatus: true) == 0
-                }
-            }
             steps {
-                // This is where you would define the steps to be executed in this stage
-                echo "Scanning Docker image with Trivy..."
-                sh "trivy image --exit-code 1 ${Docker_image}"
-            }
+                script {
+                     // Scan the Docker image with Trivy, excluding medium severity vulnerabilities
+                    def scanResult = sh(script: "trivy image --exit-code 1 --severity HIGH,CRITICAL ${IMAGE_NAME}", returnStatus: true)
+                    if (scanResult != 0) {
+                           error "Image scanning failed. High or Critical vulnerabilities found."
+                     } else {
+                           echo "Image scanning passed."
+                        }
+        }
             
         }
         
