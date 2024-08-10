@@ -1,5 +1,5 @@
 # Use OpenJDK to run the application - run time image
-FROM ubuntu/jre:8-22.04_edge
+FROM 9902736822/ubunu_java:latest
 
 #patch the image
 RUN apt-get update -y
