@@ -2,6 +2,8 @@ pipeline{
     environment {
         Docker_image = "springbootapp:${Build_Version}"
         SONAR_URL = "http://192.168.1.130:9000" 
+        DOCKER_REGISTRY = "https://hub.docker.com/"
+        DOCKER_CREDENTIALS_ID = "1001"
         
     }
     agent {
@@ -66,6 +68,21 @@ pipeline{
             }
             
         }
+        stage('Image push to registry'){
+            when {
+                expression {currentBuild.result == 'SUCCESS'}
+            }
+            steps{
+                script{
+                    echo "Docker tag Image"
+                    sh "docker tag ${Docker_image} 9902736822/${Docker_image}"
+                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}")
+                    docker.image("9902736822/${Docker_image}").push()
+
+                }
+            }
+        }
+
         
     }
 }
