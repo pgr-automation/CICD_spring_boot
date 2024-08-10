@@ -1,5 +1,8 @@
 # Use OpenJDK to run the application - run time image
-FROM openjdk:17-jdk-slim
+FROM ubuntu/jre
+
+#patch the image
+RUN apt-get update -y
 
 # Set the working directory
 WORKDIR /app

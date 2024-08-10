@@ -49,6 +49,20 @@ pipeline{
                 '''
             }
         }
+        stage('Image scan using trivy'){
+            
+            when {
+                expression {
+                    return sh(script: 'trivy image --exit-code 1 ${Docker_image}', returnStatus: true) == 0
+                }
+            }
+            steps {
+                // This is where you would define the steps to be executed in this stage
+                echo "Scanning Docker image with Trivy..."
+                sh "trivy image --exit-code 1 ${Docker_image}"
+            }
+            
+        }
         
     }
 }
