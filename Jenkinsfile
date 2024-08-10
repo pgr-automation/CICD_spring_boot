@@ -68,20 +68,26 @@ pipeline{
             }
             
         }
-        stage('Image push to registry'){
-            when {
-                expression {currentBuild.result == 'SUCCESS'}
-            }
-            steps{
-                script{
-                    echo "Docker tag Image"
-                    sh "docker tag ${Docker_image} 9902736822/${Docker_image}"
-                    docker.withRegistry("${DOCKER_REGISTRY}", "${DOCKER_CREDENTIALS_ID}")
-                    docker.image("9902736822/${Docker_image}").push()
 
-                }
+        stage('Tag Image and Push to registry'){
+            steps{
+                sh '''
+                    echo "Docker tag Image"
+                    docker tag ${Docker_image} 9902736822/${Docker_image}
+                    echo "justdialcroma" | docker login -u 9902736822 --password-stdin 
+                    docker push 9902736822/${Docker_image}
+                '''
             }
         }
+        
+        stage('Deleting Old Version Image'){
+            steps{
+                sh '''
+                docker rmi -f 9902736822/springbootapp:${Del_Version}
+                '''
+            }
+        }
+        
 
         
     }
