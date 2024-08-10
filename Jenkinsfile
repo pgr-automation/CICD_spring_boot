@@ -71,11 +71,16 @@ pipeline{
 
         stage('Tag Image and Push to registry'){
             steps{
-                sh '''
-                    echo ${DOCKER_CREDENTIALS_ID_PSW} | docker login -u ${DOCKER_CREDENTIALS_ID_USR} --password-stdin
-                    docker tag ${Docker_image} ${Docker_image}
-                    docker push ${Docker_image}
-                '''
+                script{
+                    withCredentials([string(credentialsId: 'registry_passwd', variable: 'registry_pwd')]) {
+                        sh '''
+                        docker login -u 9902736822 -p ${registry_pwd}
+                        docker tag ${Docker_image} ${Docker_image}
+                        docker push ${Docker_image}
+                        '''
+
+                    }
+                }
 
             }
         }
