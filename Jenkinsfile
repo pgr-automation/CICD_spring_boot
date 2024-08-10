@@ -71,12 +71,17 @@ pipeline{
 
         stage('Tag Image and Push to registry'){
             steps{
-                sh '''
-                    echo "Docker tag Image"
-                    docker tag ${Docker_image} 9902736822/${Docker_image}
-                    echo "****" | docker login -u 9902736822 --password-stdin 
-                    docker push 9902736822/${Docker_image}
-                '''
+                withDockerRegistry(credentialsId: '1001', url: 'https://hub.docker.com/') {
+                    script{
+                        sh '''
+                            echo "Docker tag Image"
+                            docker tag ${Docker_image} 9902736822/${Docker_image}
+                            docker push 9902736822/${Docker_image}
+                        '''
+
+                    }
+                }
+
             }
         }
         
@@ -89,9 +94,7 @@ pipeline{
                 docker rmi -f springbootapp:${Build_Version}
                 '''
             }
-        }
-        
-
+        }    
         
     }
 }
