@@ -74,7 +74,7 @@ pipeline{
                 sh '''
                     echo "Docker tag Image"
                     docker tag ${Docker_image} 9902736822/${Docker_image}
-                    echo "justdialcroma" | docker login -u 9902736822 --password-stdin 
+                    echo "******" | docker login -u 9902736822 --password-stdin 
                     docker push 9902736822/${Docker_image}
                 '''
             }
