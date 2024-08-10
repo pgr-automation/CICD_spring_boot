@@ -71,7 +71,7 @@ pipeline{
 
         stage('Tag Image and Push to registry'){
             steps{
-                withDockerRegistry(credentialsId: '1001', url: 'https://hub.docker.com/') {
+                withDockerRegistry(credentialsId: '1001', url: 'https://registry-1.docker.io/v2/') {
                     script{
                         sh '''
                             echo "Docker tag Image"
