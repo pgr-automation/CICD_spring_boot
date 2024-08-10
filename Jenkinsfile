@@ -1,6 +1,6 @@
 pipeline{
     environment {
-        Docker_image = "springbootapp"
+        Docker_image = "springbootapp:${Build_Version}"
         SONAR_URL = "http://192.168.1.130:9000" 
         
     }
@@ -52,15 +52,18 @@ pipeline{
         stage('Image scan using trivy'){
             
             steps {
-                script {
-                     // Scan the Docker image with Trivy, excluding medium severity vulnerabilities
-                    def scanResult = sh(script: "trivy image --exit-code 1 --severity HIGH,CRITICAL ${IMAGE_NAME}", returnStatus: true)
-                    if (scanResult != 0) {
-                           error "Image scanning failed. High or Critical vulnerabilities found."
-                     } else {
-                           echo "Image scanning passed."
-                        }
-        }
+                script{
+                    def scanResult = sh(script: "trivy image --exit-code 1 --severity HIGH,CRITICAL ${Docker_image}", returnStatus: true)
+                    if (scanResult != 0){
+                        error "Image scanning failed. High or Critical vulnerabilities found."
+                    }
+                    else {
+                        echo "Image Passed Vulnerabilities Scan "
+                    }
+                }
+               
+            
+            }
             
         }
         
