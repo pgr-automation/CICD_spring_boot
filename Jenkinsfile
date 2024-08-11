@@ -100,7 +100,7 @@ pipeline{
                 sh '''
                     git clone git@github.com:pgr-automation/CICD_spring_boot-_k8s_Deployment_manifest.git
                     sed -i 's/release-image/${Docker_image}/' Deployment.yml
-                    git add . ; git status;git commit -m "updating deployment file ${Docker_image}"; git push; git log
+                    git add . ; git status;git commit -m "updating deployment file ${Docker_image}"; git push; git log | tail 
 
                 '''
             }
