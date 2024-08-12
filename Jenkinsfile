@@ -128,6 +128,7 @@ pipeline{
                         git add Deployment.yml
                         git commit -m "new release ${Docker_image}" 
                         git push https://${Git_token}:x-oauth-basic@github.com/pgr-automation/${REPO_NAME}.git HEAD:main
+                        git log 
                     '''
                 }
             }
