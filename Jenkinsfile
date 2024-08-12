@@ -118,7 +118,8 @@ pipeline{
                     sh '''
                         mkdir -p /var/lib/jenkins/automation/${REPO_NAME}
                         cd /var/lib/jenkins/automation/${REPO_NAME}
-                        ls -lrth 
+                        if [ -d .git ]; then echo "git exist"; else git init;fi
+                        ls -lrtha 
                         git config user.email "grprashanth94@gamil.com"
                         git config user.name "${USER_NAME}"
                         sed -i "s/release-image/${Docker_image}/g" Deployment.yml
