@@ -97,6 +97,7 @@ pipeline{
         }
         stage('Updating k8s deployment manifest file'){
             steps{
+                agent { label 'master' }
                 sh '''
                     sed -i 's/release-image/${Docker_image}/' Deployment.yml
                     cp -f Deployment.yml /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
