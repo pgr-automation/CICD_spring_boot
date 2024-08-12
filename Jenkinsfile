@@ -14,12 +14,6 @@ pipeline{
     
     stages{
         stage('Git check out'){
-            agent {
-                docker { image '9902736822/maven_project_agent:latest'
-                args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-
-            }
             steps{
                 script{
                     git branch: 'main', credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', url: 'https://github.com/pgr-automation/CICD_spring_boot.git'
@@ -28,12 +22,6 @@ pipeline{
             }
         }
         stage("build"){
-            agent {
-                docker { image '9902736822/maven_project_agent:latest'
-                args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-
-            }
             steps{
                 sh '''
                 cd spring-bootapp/
@@ -44,12 +32,6 @@ pipeline{
             }
         }
         stage('SonarQube Code Analysis'){
-            agent {
-                docker { image '9902736822/maven_project_agent:latest'
-                args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-
-            }
             steps{
                 withCredentials([string(credentialsId: 'SonarQube', variable: 'SONAR_AUTH_TOKEN')]) {
                     sh '''
@@ -61,12 +43,7 @@ pipeline{
             }
         }
         stage('Docker Image Build'){
-            agent {
-                docker { image '9902736822/maven_project_agent:latest'
-                args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
-                }
-
-            }
+             
             steps{
                 sh '''
                     cd spring-bootapp/  
@@ -75,7 +52,6 @@ pipeline{
             }
         }
         stage('Image scan using trivy'){
-            
             
             steps {
                 script{
