@@ -118,10 +118,14 @@ pipeline{
                     sh '''
                         mkdir -p /var/lib/jenkins/automation/${REPO_NAME}
                         cd /var/lib/jenkins/automation/${REPO_NAME}
-                        if [ -d .git ]; then echo "git exist"; else git init;fi
-                        ls -lrtha 
+                        c
+                        if [ ! -d ".git" ]; then
+                            git clone https://${Git_token}:x-oauth-basic@github.com/pgr-automation/${REPO_NAME}.git .
+                        fi
+                        ls -lrtha
                         git config user.email "grprashanth94@gamil.com"
                         git config user.name "${USER_NAME}"
+                        cp -f /var/lib/jenkins/workspace/CICD_spring_boot_app/spring-bootapp/Deployment.yml .
                         sed -i "s/release-image/${Docker_image}/g" Deployment.yml
                         git add ${REPO_NAME}/Deployment.yml
                         git commit -m "new release ${Docker_image}" 
