@@ -107,29 +107,27 @@ pipeline{
                 '''
             }
         }
-        stage('Updating k8s deployment manifest file'){
+        stage('Updating k8s deployment manifest file') {
             environment {
                 REPO_NAME = "CICD_spring_boot-_k8s_Deployment_manifest"
                 USER_NAME = "pgr-automation"
+                USER_EMAIL = "grprashanth94@gmail.com"  // Corrected the email address
             }
-            steps{
-                withCredentials([gitUsernamePassword(credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', gitToolName: 'Default')]) {
-                    // some block
+            steps {
+                withCredentials([string(credentialsId: 'HTTPS_GITHUB', variable: 'Git_token')]) {
                     sh '''
                         mkdir -p /var/lib/jenkins/automation/${REPO_NAME}
                         cd /var/lib/jenkins/automation/${REPO_NAME}
-                        c
-                        if [ ! -d ".git" ]; then
+                        if [ ! -d ".git" ]; then 
                             git clone https://${Git_token}:x-oauth-basic@github.com/pgr-automation/${REPO_NAME}.git .
-                        fi
-                        ls -lrtha
-                        git config user.email "grprashanth94@gamil.com"
+                        fi                    
+                        git config user.email "${USER_EMAIL}"
                         git config user.name "${USER_NAME}"
-                        cp -f /var/lib/jenkins/workspace/CICD_spring_boot_app/spring-bootapp/Deployment.yml .
-                        sed -i "s/release-image/${Docker_image}/g" Deployment.yml
-                        git add ${REPO_NAME}/Deployment.yml
+                        cp -f /var/lib/jenkins/workspace/CICD_spring_boot_app/Deployment.yml .
+                        sed -i "s|release-image|${Docker_image}|g" Deployment.yml
+                        git add Deployment.yml
                         git commit -m "new release ${Docker_image}" 
-                        git push HEAD:main
+                        git push https://${Git_token}:x-oauth-basic@github.com/pgr-automation/${REPO_NAME}.git HEAD:main
                     '''
                 }
             }
