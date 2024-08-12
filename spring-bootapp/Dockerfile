@@ -1,5 +1,5 @@
 # Use OpenJDK to run the application - run time image
-FROM 9902736822/ubunu_java:latest
+FROM 9902736822/java_24:latest
 
 #patch the image
 RUN apt-get update -y
