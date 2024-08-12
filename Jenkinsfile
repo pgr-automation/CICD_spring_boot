@@ -37,7 +37,18 @@ pipeline{
                     sh '''
                         cd spring-bootapp/
                         mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+
                         '''
+                }
+
+            }
+        }
+        stage('SonarQube Quality Gate'){
+            steps{
+                withCredentials([string(credentialsId: 'SonarQube', variable: 'SONAR_AUTH_TOKEN')]) {
+                    script{
+                        waitforQualityGate abortPipeline:false, -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
+                    }
                 }
 
             }
