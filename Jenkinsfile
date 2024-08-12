@@ -116,9 +116,11 @@ pipeline{
                 withCredentials([gitUsernamePassword(credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', gitToolName: 'Default')]) {
                     // some block
                     sh '''
+                        cd /var/lib/jenkins/automation/${REPO_NAME}
+                        ls -lrth 
                         git config user.email "grprashanth94@gamil.com"
                         git config user.name "${USER_NAME}"
-                        sed -i "s/release-image/${Docker_image}/g" ${REPO_NAME}/Deployment.yml
+                        sed -i "s/release-image/${Docker_image}/g" Deployment.yml
                         git add ${REPO_NAME}/Deployment.yml
                         git commit -m "new release ${Docker_image}" 
                         git push HEAD:main
