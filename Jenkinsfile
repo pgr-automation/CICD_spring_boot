@@ -8,7 +8,7 @@ pipeline{
     }
     agent {
         docker { image '9902736822/maven_project_agent:latest'
-        args '--user root -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/workspace/CICD_spring_boot_app /tmp'
+        args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
     }
     }
     
