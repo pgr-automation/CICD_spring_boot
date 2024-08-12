@@ -116,6 +116,7 @@ pipeline{
                 withCredentials([gitUsernamePassword(credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', gitToolName: 'Default')]) {
                     // some block
                     sh '''
+                        mkdir -p /var/lib/jenkins/automation/${REPO_NAME}
                         cd /var/lib/jenkins/automation/${REPO_NAME}
                         ls -lrth 
                         git config user.email "grprashanth94@gamil.com"
