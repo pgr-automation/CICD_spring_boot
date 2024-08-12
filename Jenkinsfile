@@ -88,7 +88,7 @@ pipeline{
         }
         
         stage('Deleting Old Version Image'){
-            agent { label 'master' }
+            
             steps{
                 sh '''
                 docker rmi -f 9902736822/springbootapp:${Del_Version}
