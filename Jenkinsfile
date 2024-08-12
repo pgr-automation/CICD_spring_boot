@@ -24,6 +24,8 @@ pipeline{
         stage("build"){
             steps{
                 sh '''
+                hostname
+                ip r l
                 cd spring-bootapp/
                 export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED"
                 mvn clean package 
@@ -35,6 +37,8 @@ pipeline{
             steps{
                 withCredentials([string(credentialsId: 'SonarQube', variable: 'SONAR_AUTH_TOKEN')]) {
                     sh '''
+                        hostname
+                        ip r l
                         cd spring-bootapp/
                         mvn sonar:sonar -Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}
 
@@ -48,6 +52,8 @@ pipeline{
              
             steps{
                 sh '''
+                    hostname
+                    ip r l
                     cd spring-bootapp/  
                     docker build -t ${Docker_image} .
                 '''
@@ -76,6 +82,8 @@ pipeline{
                 script{
                     withCredentials([string(credentialsId: 'registry_passwd', variable: 'registry_pwd')]) {
                         sh '''
+                        hostname
+                        ip r l
                         docker login -u 9902736822 -p ${registry_pwd}
                         docker tag ${Docker_image} ${Docker_image}
                         docker push ${Docker_image}
@@ -91,6 +99,8 @@ pipeline{
             
             steps{
                 sh '''
+                hostname
+                ip r l
                 docker rmi -f 9902736822/springbootapp:${Del_Version}
                 docker rmi -f springbootapp:${Del_Version}
                 docker rmi -f springbootapp:${Build_Version}
@@ -101,10 +111,12 @@ pipeline{
             agent { label 'master' }
             steps{
                 sh '''
+                    hostname
+                    ip r l
                     sed -i 's/release-image/${Docker_image}/' Deployment.yml
                     cp -f Deployment.yml /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
                     cd /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
-                    git remove -v 
+                    git remote -v 
                     git add . ; git status;git commit -m "updating deployment file ${Docker_image}"; git push; git log | tail 
 
                 '''
