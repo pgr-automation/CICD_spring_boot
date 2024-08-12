@@ -112,8 +112,8 @@ pipeline{
                 REPO_NAME = "CICD_spring_boot-_k8s_Deployment_manifest"
                 USER_NAME = "pgr-automation"
             }
-                steps{
-                    withCredentials([gitUsernamePassword(credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', gitToolName: 'Default')]) {
+            steps{
+                withCredentials([gitUsernamePassword(credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', gitToolName: 'Default')]) {
                     // some block
                     sh '''
                         git config user.email "grprashanth94@gamil.com"
@@ -123,11 +123,10 @@ pipeline{
                         git commit -m "new release ${Docker_image}" 
                         git push HEAD:main
                     '''
-                    }
                 }
-
             }
-        }   
+        }
+    }   
         
-    }
+    
 }
