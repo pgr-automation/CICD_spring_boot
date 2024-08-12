@@ -7,7 +7,7 @@ pipeline{
         
     }
     agent {
-        docker { image 'abhishekf5/maven-abhishek-docker-agent:v1'
+        docker { image '9902736822/ubunu_java:v2.0.0'
         args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
     }
     }
@@ -26,8 +26,6 @@ pipeline{
                 sh '''
                 hostname
                 ip r l
-                ps aux
-                cat /etc/*release
                 cd spring-bootapp/
                 export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED"
                 mvn clean package 
@@ -110,18 +108,23 @@ pipeline{
             }
         }
         stage('Updating k8s deployment manifest file'){
-            agent { label 'master' }
-            steps{
-                sh '''
-                    hostname
-                    ip r l
-                    sed -i 's/release-image/${Docker_image}/' Deployment.yml
-                    cp -f Deployment.yml /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
-                    cd /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
-                    git remote -v 
-                    git add . ; git status;git commit -m "updating deployment file ${Docker_image}"; git push; git log | tail 
+            environment {
+                REPO_NAME = "CICD_spring_boot-_k8s_Deployment_manifest"
+                USER_NAME = "pgr-automation"
+                steps{
+                    withCredentials([gitUsernamePassword(credentialsId: '28059df9-d0e4-49f6-9da6-e410f9470aff', gitToolName: 'Default')]) {
+                    // some block
+                    sh '''
+                        git config user.email "grprashanth94@gamil.com"
+                        git config user.name "${USER_NAME}"
+                        sed -i "s/release-image/${Docker_image}/g" ${REPO_NAME}/Deployment.yml
+                        git add ${REPO_NAME}/Deployment.yml
+                        git commit -m "new release ${Docker_image}" 
+                        git push HEAD:main
+                    '''
+                    }
+                }
 
-                '''
             }
         }   
         
