@@ -26,6 +26,8 @@ pipeline{
                 sh '''
                 hostname
                 ip r l
+                ps aux
+                cat /etc/*release
                 cd spring-bootapp/
                 export MAVEN_OPTS="--add-opens java.base/java.lang=ALL-UNNAMED"
                 mvn clean package 
