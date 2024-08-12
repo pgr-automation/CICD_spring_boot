@@ -121,8 +121,10 @@ pipeline{
                         if [ ! -d ".git" ]; then 
                             git clone https://${Git_token}:x-oauth-basic@github.com/pgr-automation/${REPO_NAME}.git .
                         fi                    
+                        
                         git config user.email "${USER_EMAIL}"
                         git config user.name "${USER_NAME}"
+                        cd spring_boot
                         cp -f /var/lib/jenkins/workspace/CICD_spring_boot_app/Deployment.yml .
                         sed -i "s|release-image|${Docker_image}|g" Deployment.yml
                         git add Deployment.yml
