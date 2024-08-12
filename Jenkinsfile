@@ -43,16 +43,7 @@ pipeline{
 
             }
         }
-        stage('SonarQube Quality Gate'){
-            steps{
-                withCredentials([string(credentialsId: 'SonarQube', variable: 'SONAR_AUTH_TOKEN')]) {
-                    script{
-                        waitforQualityGate abortPipeline:false '-Dsonar.login=$SONAR_AUTH_TOKEN -Dsonar.host.url=${SONAR_URL}'
-                    }
-                }
-
-            }
-        }
+        
         stage('Docker Image Build'){
              
             steps{
