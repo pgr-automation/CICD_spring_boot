@@ -98,7 +98,7 @@ pipeline{
         stage('Updating k8s deployment manifest file'){
             steps{
                 sh '''
-                    git clone git@github.com:pgr-automation/CICD_spring_boot-_k8s_Deployment_manifest.git
+                    cp -f Deployment.yml /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
                     sed -i 's/release-image/${Docker_image}/' Deployment.yml
                     git add . ; git status;git commit -m "updating deployment file ${Docker_image}"; git push; git log | tail 
 
