@@ -8,7 +8,7 @@ pipeline{
     }
     agent {
         docker { image '9902736822/maven_project_agent:latest'
-        args '--user root -v /var/run/docker.sock:/var/run/docker.sock'
+        args '--user root -v /var/run/docker.sock:/var/run/docker.sock -v /var/lib/jenkins/workspace/CICD_spring_boot_app /tmp'
     }
     }
     
@@ -97,7 +97,7 @@ pipeline{
         }
         
         stage('Deleting Old Version Image'){
-            agent none
+            agent { label 'master' }
             steps{
                 sh '''
                 docker rmi -f 9902736822/springbootapp:${Del_Version}
@@ -107,10 +107,11 @@ pipeline{
             }
         }
         stage('Updating k8s deployment manifest file'){
+            agent { label 'master' }
             steps{
-                agent { label 'master' }
                 sh '''
                     sed -i 's/release-image/${Docker_image}/' Deployment.yml
+                    
                     cp -f Deployment.yml /var/lib/jenkins/automation/CICD_spring_boot-_k8s_Deployment_manifest
                     git add . ; git status;git commit -m "updating deployment file ${Docker_image}"; git push; git log | tail 
 
