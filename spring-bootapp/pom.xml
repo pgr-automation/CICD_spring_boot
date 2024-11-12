@@ -60,7 +60,7 @@
         		<url>http://192.168.1.130:8081/repository/pgr-maven-release/</url> <!-- Release repository URL -->
     		</repository>
     		<snapshotRepository>
-        		<id>nexus-snapshots</id> <!-- Optional: For snapshot builds -->
+        		<id>pgr-nexus-repo-snapshot</id> <!-- Optional: For snapshot builds -->
         		<url>http://192.168.1.130:8081/repository/pgr-maven-snapshot/</url>
     		</snapshotRepository>
 	</distributionManagement>
