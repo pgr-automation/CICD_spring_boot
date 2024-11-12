@@ -54,5 +54,16 @@
 			</plugin>
 		</plugins>
 	</build>
+	<distributionManagement>
+    		<repository>
+        		<id>pgr-nexus-repo</id> <!-- This id should match the 'id' in your settings.xml -->
+        		<url>http://192.168.1.130:8081/repository/pgr-maven-release/</url> <!-- Release repository URL -->
+    		</repository>
+    		<snapshotRepository>
+        		<id>nexus-snapshots</id> <!-- Optional: For snapshot builds -->
+        		<url>http://192.168.1.130:8081/repository/pgr-maven-snapshot/</url>
+    		</snapshotRepository>
+	</distributionManagement>
+
 
 </project>
