@@ -64,6 +64,8 @@
         		<url>http://192.168.1.130:8081/repository/pgr-maven-snapshot/</url>
     		</snapshotRepository>
 	</distributionManagement>
-
+  <properties>
+      <sonar.coverage.jacoco.xmlReportPaths>target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
+  </properties>
 
 </project>
