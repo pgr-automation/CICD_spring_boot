@@ -1,4 +1,4 @@
 @Library('pgr_automation_libraries') _  // Import the shared library
 mavenDockerServiceBuild {
-  
+    buildAgentCluster = "k8-jenkins"
 }
